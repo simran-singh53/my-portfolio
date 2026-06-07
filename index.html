@@ -1,82 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>My Website</title>
+<meta charset="UTF-8">
+<title>My Website</title>
 
-  <style>
-    body {
-      font-family: Arial;
-      margin: 0;
-      background: #f4f4f4;
-      text-align: center;
-    }
+<style>
+  body {
+    font-family: Arial;
+    margin: 0;
+    text-align: center;
+    background: #f4f4f4;
+  }
 
-    header {
-      background: #222;
-      color: white;
-      padding: 15px;
-    }
+  header {
+    background: #222;
+    color: white;
+    padding: 15px;
+  }
 
-    button {
-      padding: 10px 15px;
-      margin: 8px;
-      border: none;
-      background: #007bff;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+  button {
+    padding: 10px 15px;
+    margin: 8px;
+    border: none;
+    background: #007bff;
+    color: white;
+    border-radius: 6px;
+    cursor: pointer;
+  }
 
-    button:hover {
-      background: #0056b3;
-    }
+  .app {
+    display: none;
+    background: white;
+    width: 320px;
+    margin: 20px auto;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
 
-    .app {
-      display: none;
-      background: white;
-      width: 340px;
-      margin: 20px auto;
-      padding: 15px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
+  input, textarea {
+    width: 80%;
+    padding: 8px;
+    margin-top: 8px;
+  }
 
-    input, textarea {
-      padding: 8px;
-      width: 80%;
-      margin-top: 8px;
-    }
+  ul {
+    list-style: none;
+    padding: 0;
+  }
 
-    ul {
-      list-style: none;
-      padding: 0;
-    }
+  li {
+    background: #eee;
+    margin-top: 8px;
+    padding: 8px;
+  }
 
-    li {
-      background: #eee;
-      margin-top: 8px;
-      padding: 8px;
-      display: flex;
-      justify-content: space-between;
-      border-radius: 5px;
-    }
+  .delete {
+    background: red;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+</style>
 
-    .delete {
-      background: red;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-
-    .note {
-      background: #fff8c4;
-      padding: 8px;
-      margin-top: 8px;
-      border-radius: 5px;
-      text-align: left;
-    }
-  </style>
 </head>
 
 <body>
@@ -86,85 +72,74 @@
 </header>
 
 <!-- BUTTONS -->
-<button onclick="toggleCalc()">Calculator</button>
-<button onclick="toggleTodo()">To-Do</button>
-<button onclick="toggleNotes()">Notes</button>
+<button onclick="showApp('calc')">Calculator</button>
+<button onclick="showApp('todo')">To-Do App</button>
+<button onclick="showApp('notes')">Notes App</button>
 
 <!-- CALCULATOR -->
 <div id="calc" class="app">
   <h3>Calculator</h3>
-  <p>Calculator yaha add kiya ja sakta hai</p>
+  <p>Calculator yaha add hoga</p>
 </div>
 
-<!-- TO DO -->
+<!-- TO-DO -->
 <div id="todo" class="app">
   <h3>To-Do App</h3>
 
-  <input id="taskInput" type="text" placeholder="Enter task">
+  <input id="taskInput" placeholder="Enter task">
   <button onclick="addTask()">Add</button>
 
   <ul id="taskList"></ul>
 </div>
 
-<!-- NOTES APP -->
+<!-- NOTES -->
 <div id="notes" class="app">
   <h3>Notes App</h3>
 
-  <textarea id="noteInput" placeholder="Write your note..."></textarea><br>
-  <button onclick="addNote()">Save Note</button>
+  <textarea id="noteInput" placeholder="Write note"></textarea><br>
+  <button onclick="addNote()">Save</button>
 
-  <div id="noteList"></div>
+  <ul id="noteList"></ul>
 </div>
 
 <script>
-  function toggleCalc() {
-    toggle("calc");
-  }
 
-  function toggleTodo() {
-    toggle("todo");
-  }
+function showApp(id) {
+  // sab band
+  document.getElementById("calc").style.display = "none";
+  document.getElementById("todo").style.display = "none";
+  document.getElementById("notes").style.display = "none";
 
-  function toggleNotes() {
-    toggle("notes");
-  }
+  // selected open
+  document.getElementById(id).style.display = "block";
+}
 
-  function toggle(id) {
-    let app = document.getElementById(id);
-    app.style.display = (app.style.display === "block") ? "none" : "block";
-  }
+/* TO-DO */
+function addTask() {
+  let input = document.getElementById("taskInput");
+  let task = input.value.trim();
+  if (task === "") return;
 
-  // TO-DO
-  function addTask() {
-    let input = document.getElementById("taskInput");
-    let task = input.value.trim();
+  let li = document.createElement("li");
+  li.innerHTML = task + ' <button class="delete" onclick="this.parentElement.remove()">X</button>';
 
-    if (task === "") return;
+  document.getElementById("taskList").appendChild(li);
+  input.value = "";
+}
 
-    let li = document.createElement("li");
-    li.innerHTML = task +
-      ' <button class="delete" onclick="this.parentElement.remove()">X</button>';
+/* NOTES */
+function addNote() {
+  let input = document.getElementById("noteInput");
+  let note = input.value.trim();
+  if (note === "") return;
 
-    document.getElementById("taskList").appendChild(li);
-    input.value = "";
-  }
+  let li = document.createElement("li");
+  li.innerHTML = note + ' <button class="delete" onclick="this.parentElement.remove()">X</button>';
 
-  // NOTES
-  function addNote() {
-    let input = document.getElementById("noteInput");
-    let note = input.value.trim();
+  document.getElementById("noteList").appendChild(li);
+  input.value = "";
+}
 
-    if (note === "") return;
-
-    let div = document.createElement("div");
-    div.className = "note";
-    div.innerHTML = note +
-      '<br><button class="delete" onclick="this.parentElement.remove()">Delete</button>';
-
-    document.getElementById("noteList").appendChild(div);
-
-    input.value = "";
-  }
 </script>
 
 </body>
