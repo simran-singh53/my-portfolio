@@ -1,34 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>My Website</title>
+
   <style>
     body {
-      font-family: Arial, sans-serif;
+      font-family: Arial;
       margin: 0;
       background: #f4f4f4;
+      text-align: center;
     }
 
     header {
-      background: #333;
+      background: #222;
       color: white;
       padding: 15px;
-      text-align: center;
-    }
-
-    .container {
-      padding: 20px;
-      text-align: center;
     }
 
     button {
       padding: 10px 15px;
-      margin: 10px;
+      margin: 8px;
       border: none;
       background: #007bff;
       color: white;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
     }
 
@@ -36,21 +32,20 @@
       background: #0056b3;
     }
 
-    #todoApp {
+    .app {
       display: none;
       background: white;
-      padding: 20px;
-      margin-top: 20px;
+      width: 340px;
+      margin: 20px auto;
+      padding: 15px;
       border-radius: 10px;
-      width: 300px;
-      margin-left: auto;
-      margin-right: auto;
       box-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
-    input {
+    input, textarea {
       padding: 8px;
       width: 80%;
+      margin-top: 8px;
     }
 
     ul {
@@ -72,8 +67,14 @@
       color: white;
       border: none;
       cursor: pointer;
-      border-radius: 3px;
-      padding: 3px 6px;
+    }
+
+    .note {
+      background: #fff8c4;
+      padding: 8px;
+      margin-top: 8px;
+      border-radius: 5px;
+      text-align: left;
     }
   </style>
 </head>
@@ -81,35 +82,59 @@
 <body>
 
 <header>
-  <h1>My Portfolio Website</h1>
+  <h1>My Website</h1>
 </header>
 
-<div class="container">
+<!-- BUTTONS -->
+<button onclick="toggleCalc()">Calculator</button>
+<button onclick="toggleTodo()">To-Do</button>
+<button onclick="toggleNotes()">Notes</button>
 
-  <h2>Welcome!</h2>
-  <p>Ye meri simple website hai</p>
+<!-- CALCULATOR -->
+<div id="calc" class="app">
+  <h3>Calculator</h3>
+  <p>Calculator yaha add kiya ja sakta hai</p>
+</div>
 
-  <!-- Button -->
-  <button onclick="toggleTodo()">Open To-Do App</button>
+<!-- TO DO -->
+<div id="todo" class="app">
+  <h3>To-Do App</h3>
 
-  <!-- To Do App -->
-  <div id="todoApp">
-    <h3>To-Do App</h3>
+  <input id="taskInput" type="text" placeholder="Enter task">
+  <button onclick="addTask()">Add</button>
 
-    <input type="text" id="taskInput" placeholder="New task..." />
-    <button onclick="addTask()">Add</button>
+  <ul id="taskList"></ul>
+</div>
 
-    <ul id="taskList"></ul>
-  </div>
+<!-- NOTES APP -->
+<div id="notes" class="app">
+  <h3>Notes App</h3>
 
+  <textarea id="noteInput" placeholder="Write your note..."></textarea><br>
+  <button onclick="addNote()">Save Note</button>
+
+  <div id="noteList"></div>
 </div>
 
 <script>
+  function toggleCalc() {
+    toggle("calc");
+  }
+
   function toggleTodo() {
-    let app = document.getElementById("todoApp");
+    toggle("todo");
+  }
+
+  function toggleNotes() {
+    toggle("notes");
+  }
+
+  function toggle(id) {
+    let app = document.getElementById(id);
     app.style.display = (app.style.display === "block") ? "none" : "block";
   }
 
+  // TO-DO
   function addTask() {
     let input = document.getElementById("taskInput");
     let task = input.value.trim();
@@ -117,9 +142,26 @@
     if (task === "") return;
 
     let li = document.createElement("li");
-    li.innerHTML = task + ' <button class="delete" onclick="this.parentElement.remove()">X</button>';
+    li.innerHTML = task +
+      ' <button class="delete" onclick="this.parentElement.remove()">X</button>';
 
     document.getElementById("taskList").appendChild(li);
+    input.value = "";
+  }
+
+  // NOTES
+  function addNote() {
+    let input = document.getElementById("noteInput");
+    let note = input.value.trim();
+
+    if (note === "") return;
+
+    let div = document.createElement("div");
+    div.className = "note";
+    div.innerHTML = note +
+      '<br><button class="delete" onclick="this.parentElement.remove()">Delete</button>';
+
+    document.getElementById("noteList").appendChild(div);
 
     input.value = "";
   }
